@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Income</title>
+	<script type="text/javascript" src="jquery.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#btnRegister").click(function(){
+				var tax=$("#tax").val();
+				var male=$("#male").val();
+				var female=$("#female").val();
+				var yes=$("#yes").val();
+				var no=$("#no").val();
+				console.log('btnRegister');
+
+			})
+		})
+	</script>
+</head>
+<body>
+	<div>
+		<h3>Myanmar Income Tax Calculator</h3>
+			တစ်လ၀င်ငွေ(ကျပ်)<input type="number" name="number" id="tax"><br>
+			<input type="checkbox" name="gender" id="male">အတူနေအဘ
+			<input type="checkbox" name="gender" id="female">အတူနေအမိ
+			<br>
+			<label>အိမ်ထောင်</label>
+			<input type="radio" name="" id="yes">ရှိ
+			<input type="radio" name="" id="no">မရှိ
+			<br>
+			သားသမီး<input type="number" name="number" id="child">‌(ယောက်)<br>
+			<button id="btnRegister">တွက်ချက်ပါ
+			</button>
+
+	</div>
+</body>
+</html>

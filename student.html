@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Student Registration</title>
+	<script type="text/javascript" src="jquery.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#edit_form").hide();
+			showdata();
+			$("#btnRegister").click(function(){
+				var name=$("#name").val();
+				var age=$("#age").val();
+				var address=$("#address").val();
+
+				var student={
+					name:name,
+					age:age,
+					address:address
+				};
+
+				var studentlist=localStorage.getItem("student");
+				var studentArray;
+					if(studentlist==null){
+						studentArray=[];
+					}else {
+						studentArray=JSON.parse(studentlist);
+				}
+				studentArray.push(student);
+				var studentstring=JSON.stringify(studentArray);
+				localStorage.setItem('student', studentstring);
+				showdata();
+			})
+			function showdata(){
+				var studentlist=localStorage.getItem("student");
+				if(studentlist){
+					var studentArray=JSON.parse(studentlist);
+					var j=1;
+					var html="";
+					$.each(studentArray,function(i,v){
+						html+=`<tr>
+						<td>${j++}</td>
+						<td>${v.name}</td>
+						<td>${v.age}</td>
+						<td>${v.address}</td>
+						<td>
+						<button id="btn_edit" data-id="${i}">edit</button>
+						<button id="btn_delete" data-id="${i}">delete</button>
+						</td>
+						<tr>`
+					})
+					$("#tbody").html(html);
+					
+				}
+			}
+			$("tbody").on('click','#btn_edit',function(){
+				//alert("ok");
+				$("#edit_form").show();
+				$("#reg_form").hide();
+				var id=$(this).data('id');
+
+				var studentlist=localStorage.getItem("student");
+				var studentArray=JSON.parse(studentlist);
+				var mystudent=studentArray[id];
+				console.log(mystudent);
+
+				var name=mystudent.name;
+				//console.log(name);
+				var age=mystudent.age;
+				//console.log(age);
+				var address=mystudent.address;
+
+				$("#uname").val(name);
+				$("#uage").val(age);
+				$("#uaddress").val(address);
+			})
+		})
+	</script>
+</head>
+<body>
+<div id="reg_form">
+	<h3>Student Registration Form</h3>
+	Name:<input type="text" id="name"><br>
+	Age:<input type="text" id="age"><br>
+	Address:<input type="text" id="address"><br>
+	<button id="btnRegister">Register</button>
+</div>
+<div id="edit_form">
+	<h3>Student Edit Form</h3>
+	Name:<input type="text" id="uname"><br>
+	Age:<input type="text" id="uage"><br>
+	Address:<input type="text" id="uaddress"><br>
+	<button id="btnRegister">Update</button>
+</div>
+<div id="mytable">
+	<h3>Student</h3>
+	<table border="1" cellpadding="10">
+		<thead>
+			<th>No</th>
+			<th>Name</th>
+			<th>Age</th>
+			<th>Address</th>
+			<th>Action</th>
+		</thead>
+		<tbody id="tbody">
+			
+		</tbody>
+	</table>
+</body>
+</html>

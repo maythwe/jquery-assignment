@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Staff Register</title>
+	<script type="text/javascript" src="jquery.min.js"></script>
+
+	<script type="text/javascript">
+		
+		$(document).ready(function(){
+
+		$("#edit_form").hide();
+		showdata();
+
+	//register
+	$("#btnRegister").click(function(){
+			var name=$("#name").val();
+			var age=$("#age").val();
+			var gender=$("input[name='gender']:checked").val();
+			var email=$("#email").val();
+			var address=$("#address").val();
+			//console.log(gender);
+
+			var staff={
+			name:name,
+			age:age,
+			gender:gender,
+			email:email,
+			address:address
+			
+			}
+			//console.log(staff)
+			var stafflist=localStorage.getItem('staff');
+			var staffArray;
+		
+			if(stafflist==null){
+				staffArray=[];
+			}
+			else{
+				staffArray=JSON.parse(stafflist);
+			}
+
+			staffArray.push(staff);
+			var staffstring=JSON.stringify(staffArray);
+			localStorage.setItem('staff',staffstring);
+			showdata();
+		})
+
+	//show table
+	function showdata(){
+			var stafflist=localStorage.getItem("staff");
+			//console.log(stafflist);
+			if(stafflist){
+			var staffArray=JSON.parse(stafflist);
+			//console.log(staffArray);
+
+			var j=1;
+			var html="";
+			$.each(staffArray,function(i,v){
+
+			html+=`<tr>
+			<td>${j++}</td>
+			<td>${v.name}</td>
+			<td>${v.age}</td>
+			<td>${v.gender}</td>
+			<td>${v.email}</td>
+			<td>${v.address}</td>
+			<td>
+			<button id="btn_edit" data-id="${i}">Edit</button>
+			<button id="btn_delete" data-id="${i}">Delete</button>
+			</td>
+			</tr>`
+
+			})
+
+			$("tbody").html(html);
+
+			}
+	}
+
+	$("tbody").on('click','#btn_edit',function(){
+
+		$("#edit_form").show();
+		$("#reg_form").hide();
+
+		var id=$(this).data('id');
+		//console.log(id);
+
+		var stafflist=localStorage.getItem("staff");
+
+		var staffArray=JSON.parse(stafflist);
+
+		var mystaff=staffArray[id];
+
+		//console.log(mystaff);
+
+		var name=mystaff.name;
+		var age=mystaff.age;
+		var gender=mystaff.gender;
+		var email=mystaff.email;
+		var address=mystaff.address;
+
+		console.log(gender);
+
+		$("#uname").val(name);
+		$("#uage").val(age);
+		$("#uaddress").val(address);
+		$("#uemail").val(email);
+		$("#uid").val(id);
+
+		if(gender=="male"){
+				$("#umale").prop("checked","checked");
+		}else{
+				$("#ufemale").prop("checked","checked");
+		}
+	})
+
+	$("#btnupdate").click(function(){
+		//alert("Ok");
+		var id=$("#uid").val();
+		var name=$("#uname").val();
+		var age=$("#uage").val();
+		var address=$("#uaddress").val();
+		var email=$("#uemail").val();
+		var gender=$("input[name='gender']:checked").val();
+
+		var staff={
+		name:name,
+		age:age,
+		address:address,
+		email:email,
+		gender:gender
+		}
+		//console.log(staff)
+		var stafflist=localStorage.getItem('staff');
+		var staffObj=JSON.parse(stafflist);
+		//console.log(staffObj[id]);
+
+		staffObj[id]=staff;
+
+		var staffstring=JSON.stringify(staffObj);
+		localStorage.setItem('staff',staffstring);
+		showdata();
+						
+	})
+
+	$("tbody").on('click','#btn_delete',function(){
+		var id=$(this).data('id');
+		var stafflist=localStorage.getItem('staff');
+		var staffArray=JSON.parse(stafflist);
+
+		staffArray.splice(id,1);
+
+		var staffstring=JSON.stringify(staffArray);
+		localStorage.setItem('staff',staffstring);
+		showdata();
+	})
+
+})
+</script>
+</head>
+<body>
+
+	<div id="reg_form">
+		<h3>Staff Register Form</h3>
+		Name:<input type="text" id="name"><br><br>
+		Age:<input type="text" id="age"><br><br>
+		Gender:
+		Male<input type="radio" name="gender" id="male" value="male">
+		Female<input type="radio" name="gender" id="female" value="female"><br><br>
+		Email<input type="email" name="email" id="email"><br><br>
+		Address<input type="text" name="" name="address" id="address"><br><br>
+	
+	<button id="btnRegister">Register</button>
+	</div>
+
+	<div id="edit_form">
+	<h3>Student Edit Form</h3>
+	<input type="hidden" name="uid" id="uid">
+	Name:<input type="text" id="uname"><br>
+	Age:<input type="text" id="uage"><br>
+	Gender:
+	Male<input type="radio" name="gender" id="umale" value="male">
+	Female<input type="radio" name="gender" id="ufemale" value="female"><br><br>
+	Email<input type="email" name="email" id="uemail"><br><br>
+	<label for="address">Address</label>
+	<textarea name="address" id="uaddress"></textarea><br>
+	
+	<button id="btnupdate">Update</button>
+	</div>
+
+	<div id="mytable">
+	<h3>Staff Table</h3>
+	<table border="1" cellpadding="10">
+		<thead>
+			<th>No</th>
+			<th>Name</th>
+			<th>Age</th>
+			<th>Gender</th>
+			<th>Email</th>
+			<th>Address</th>
+			<th>Action</th> 
+		</thead>
+		<tbody></tbody>
+	</table>
+	</div>
+
+</body>
+</html>
